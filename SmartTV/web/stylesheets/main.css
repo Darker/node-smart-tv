@@ -1,0 +1,43 @@
+﻿html, body {
+    padding: 0px;
+    margin: 0px;
+    background-color: #111;
+    color: #ffcc00;
+}
+
+.PlayerControls {
+    position: fixed;
+    bottom: 0px;
+
+    margin: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width:100vw;
+}
+.PlayerControls button {
+    margin: 0px;
+    /*position:absolute;
+    bottom: 0px;**/
+    border-color: #b99400;
+    border-style: solid;
+    border-width: 1px;
+    border-bottom-width: 0px;
+
+    background-color: #222;
+    border-top-left-radius: 2em;
+    border-top-right-radius: 2em;
+
+    color: #9a9281;
+
+    cursor: pointer;
+    font-weight: normal;
+}
+.PlayerControls button:hover {
+    border-color: #ffcc00;
+    color: #e0d6c2;
+}
+.PlayerControls .progress {
+    background-color: #ffc376;
+    height: 0.2em;
+    width: 100%;
+}

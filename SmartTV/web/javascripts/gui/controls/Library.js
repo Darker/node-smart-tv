@@ -13,6 +13,7 @@ class Library extends EventEmitter {
         this.headingTextH2 = document.createElement("h2");
         this.headingText = document.createTextNode("Library");
         this.headingTextH2.appendChild(this.headingText);
+        this.heading.appendChild(this.headingTextH2);
 
         this.items = document.createElement("div");
         this.items.className = "items";
@@ -34,6 +35,7 @@ class Library extends EventEmitter {
         }
     }
     set label(value) {
+        //console.log("#" + this.uniqueID + " \""+this.label+"\" -> \""+value+"\"");
         this.headingText.data = value;
     }
     get label() {

@@ -3,10 +3,20 @@ const UnsupportedMediaError = require("./exceptions/UnsupportedMediaError");
 /**
  * @typedef {import("./Video")} Video
  * */
+
+
+/**
+ * @event "timeupdate"
+ * 
+ * */
 class Player extends EventEmitter {
     constructor() {
         super();
         this.autoplay = true;
+
+        this._duration = NaN;
+        this._currentTime = 0;
+
     }
     /**
      * 
@@ -38,6 +48,13 @@ class Player extends EventEmitter {
 
     async isPlaying() { return false; }
     /**
+     * Returns true if media is loaded.
+     * 
+     * After succesful @see {#stop} call, 
+     * this should return false.
+     * */
+    async isMediaOpen() { return false; }
+    /**
      * Sets volume of the player.
      * @param {any} number value between 0 and 1, percentage of volume
      * @returns {number} final volume value, also between 0 and 1
@@ -45,10 +62,25 @@ class Player extends EventEmitter {
     async setVolume(number) { return NaN; }
 
     /**
+     * Retrieves and returns current time.
      * Returns current audio time in seconds.
+     * @returns {number}
      * */
     async getCurrentTime() {
+        return this._currentTime;
+    }
+    /**
+     * Retrieves duration of the current media
+     * value may be cached
+     * @returns {number}
+     * */
+    async getDuration() {
         return NaN;
+    }
+
+    /** @type {number} approximate current time in seconds **/
+    get currentTime() {
+        return this._currentTime;
     }
     /**
      * Seek at a time in seconds. Fraction of seconds may be supported

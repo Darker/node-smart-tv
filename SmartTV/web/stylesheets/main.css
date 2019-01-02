@@ -3,41 +3,255 @@
     margin: 0px;
     background-color: #111;
     color: #ffcc00;
+    max-width: 100vw;
+    font-family: Calibri, 'Trebuchet MS','Gill Sans', 'Gill Sans MT', sans-serif;
+
+    box-sizing: border-box;
 }
 
+body {
+    display: flex;
+    flex-direction: row;
+    max-width: 100vw;
+}
+body #main {
+    display: flex;
+    flex-shrink: 1;
+    flex-grow: 1;
+    flex-basis: 100px;
+
+    /*overflow: hidden;*/
+}
+body #menu {
+    display: flex;
+    flex-grow: 0;
+    min-width: 18ch;
+    flex-basis: 18ch;
+    height: 100vh;
+}
+@media (max-width: 300px), (pointer: coarse) {
+    body #menu {
+        position: fixed;
+        left: -100%;
+        display: block;
+        width: 100vw;
+        z-index: 500;
+    }
+}
+.MenuScreen {
+    width: 100%;
+    display: none;
+}
+.MenuScreen.visible {
+    display:initial;
+}
+
+.TouchPad {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../images/touchpad/background.png');
+    background-size: 80vw;
+}
+
+.Libraries {
+    width: 100%;
+}
+.Libraries.visible {
+}
+.Library {
+    display: none;
+}
+.Library.selected {
+    display: initial;
+}
+.Library .heading {
+    padding: 0px;
+    margin: 0px;
+}
+.Library .heading h2 {
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 2pt;
+
+    background-color: #ffcc00;
+    color: black;
+}
+.LibraryItem {
+    color: #ffcc00;
+    background-color: #222;
+}
+.LibraryItem:nth-child(2n) {
+    background-color: #292929
+}
+.LibraryItem .title{
+    text-wrap: none;
+    
+    white-space: nowrap;
+    overflow:hidden;
+    max-width: 100%;
+    text-overflow: ellipsis;
+
+    font-size: 15pt;
+
+    cursor: pointer;
+}
+@media (pointer: coarse) {
+    .LibraryItem .title {
+        font-size: 18pt;
+    }
+}
 .PlayerControls {
     position: fixed;
-    bottom: 0px;
+    -webkit-backface-visibility: hidden;
+    bottom: 0%;
 
     margin: 0px;
     margin-left: auto;
     margin-right: auto;
-    width:100vw;
+    
+
+    z-index: 100;
+
+    --progress: 30;
+    --preloaded: 50;
+
+    --color-progress: rgba(252,65,2,1);
+    --color-preloaded: rgba(255,196,2,1);
 }
 .PlayerControls button {
     margin: 0px;
+    padding: 0px;
     /*position:absolute;
     bottom: 0px;**/
     border-color: #b99400;
     border-style: solid;
     border-width: 1px;
     border-bottom-width: 0px;
-
     background-color: #222;
-    border-top-left-radius: 2em;
-    border-top-right-radius: 2em;
-
-    color: #9a9281;
-
+    border-top-left-radius: 1000px;
+    border-top-right-radius:1000px;
+    color: transparent;
     cursor: pointer;
     font-weight: normal;
+    font-size: 2pt;
+
+
+    background-size: 60%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 20pt;
+    height: 20pt;
 }
+
+
+
+@media (pointer: coarse) {
+    .PlayerControls button {
+        width: 32pt;
+        height: 32pt;
+    }
+}
+
+.PlayerControls button.playpause {
+    background-image: url('../images/buttons/play.svg');
+}
+.PlayerControls.playing button.playpause {
+    background-image: url('../images/buttons/pause.svg');
+}
+.PlayerControls button.stop {
+    background-image: url('../images/buttons/stop.svg');
+}
+
 .PlayerControls button:hover {
     border-color: #ffcc00;
     color: #e0d6c2;
 }
+.PlayerControls button:active {
+    border-color: #ffd83d;
+    background-color: #9f8415;
+}
 .PlayerControls .progress {
-    background-color: #ffc376;
-    height: 0.2em;
+    background-color: #8f7a60;
+    height: 0.3em;
     width: 100%;
+    background-image: linear-gradient(to right, var(--color-progress) 0%,var(--color-progress) var(--progress)%,var(--color-preloaded) var(--progress)%,var(--color-preloaded) var(--preloaded)%,transparent var(--preloaded)%,transparent 100%);
+}
+
+@media (pointer: coarse) {
+    .PlayerControls .progress {
+        height: 1em;
+    }
+}
+
+
+/**
+    Main menu
+*/
+.MainMenu {
+    position: relative;
+
+    background-color: rgba(0, 0, 0, 0.89);
+    margin: 0px;
+    padding: 0pt;
+
+    
+
+    width: 100%;
+    height: 100%;
+}
+
+.MainMenu .dragArrow {
+    position: absolute;
+    top: 0px;
+    left: 100%;
+    height: 100vh;
+    z-index: 110;
+    width: 1em;
+
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    background-image: url("../images/menu/menu_open.svg");
+
+    display: none;
+}
+.MainMenu.open .dragArrow {
+    left: auto;
+    right: 0px;
+    background-image: url("../images/menu/menu_close.svg");
+}
+
+@media (max-width: 300px), (pointer: coarse) {
+    .MainMenu .dragArrow {
+        display: initial;
+    }
+}
+
+.MainMenu .ListMenu {
+    max-width: 100%;
+    margin: 0px;
+    padding: 3pt;
+
+    overflow: hidden;
+
+    list-style: none;
+    list-style-type: none;
+}
+.MainMenu .MenuItem {
+    margin: 0px;
+    padding: 0px;
+    padding: 2pt;
+    
+    border-bottom: 1px solid black;
+    background-color: #210c00;
+    color: #ffffe7;
+}
+@media (pointer:coarse) {
+    .MainMenu .MenuItem {
+        font-size: 17pt;
+    }
 }

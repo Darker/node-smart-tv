@@ -38,13 +38,40 @@ class VLCMediaPlayer extends Player {
         };
         /** @type {Telnet} **/
         this.telnet = new Telnet();
+        /** @type {boolean} @private**/
+        this._playing = false;
+        this.mediaLoaded = false;
 
-        this.playing = false;
+        this.timeupdateInterval = null;
     }
     canPlay(video) {
         return video instanceof FSVideo;
     }
-
+    /** @type {boolean} **/
+    get playing() {
+        return this._playing;
+    }
+    set playing(value) {
+        this._playing = !!value;
+        this.emit("playing", this._playing);
+        if (value) {
+            if (this.timeupdateInterval == null) {
+                this.timeupdateInterval = setInterval(async () => {
+                    this.emit(
+                        "timeupdate",
+                        {
+                            currentTime: await this.getCurrentTime(),
+                            duration: await this.getDuration()
+                        }
+                    );
+                }, 1500);
+            }
+        }
+        else {
+            clearInterval(this.timeupdateInterval);
+            this.timeupdateInterval = null;
+        }
+    }
     /**
      * 
      * @param {FSVideo} video
@@ -54,11 +81,17 @@ class VLCMediaPlayer extends Player {
         await this.cmd("stop");
         await this.cmd("clear");
         await this.cmd("add " + video.fspath);
+        this.emit("medialoaded", true);
+        this.mediaLoaded = true;
         if (!this.autoplay) {
             await this.cmd("pause");
         }
-        // vlc starts playing automatically
-        this.playing = true;
+        else {
+            // vlc starts playing automatically
+            this.playing = true;
+        }
+
+        
     }
 
     async preparePlayer() {
@@ -101,19 +134,24 @@ class VLCMediaPlayer extends Player {
     }
 
     async stop() {
-        if (this.telnet.ready && this.playing) {
+        if (this.telnet.ready && this.mediaLoaded) {
             try {
                 await this.cmd("stop");
+                this.emit("medialoaded", false);
             }
             catch (e) {
                 console.error(e.stack);
             }
         }
+        this.mediaLoaded = false;
         this.playing = false;
     }
 
     async isPlaying() {
         return this.playing;
+    }
+    async isMediaOpen() {
+        return this.mediaLoaded;
     }
     /**
      * Sets volume of the player.
@@ -135,9 +173,18 @@ class VLCMediaPlayer extends Player {
             const time = await this.cmd("get_time", /[0-9]+/);
             const timeMatch = time.match(/[0-9]+/);
             if(timeMatch)
-                return parseFloat(timeMatch[0]);
+                return this._currentTime = parseFloat(timeMatch[0]);
         }
         return NaN;
+    }
+    async getDuration() {
+        if (this.telnet.ready) {
+            const time = await this.cmd("get_length", /[0-9]+/);
+            const timeMatch = time.match(/[0-9]+/);
+            if (timeMatch)
+                return this._duration = parseFloat(timeMatch[0]);
+        }
+        return await super.getDuration()
     }
     /**
      * Seek at a time in seconds. Fraction of seconds may be supported

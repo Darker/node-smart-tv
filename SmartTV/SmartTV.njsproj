@@ -38,6 +38,12 @@
     <Compile Include="lib\config\configLoader.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="lib\control\MouseControl.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\events\forwardEvents.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="lib\net\RemoteClient.js">
       <SubType>Code</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     <Compile Include="lib\video\videotypes\FSVideo.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="scripts\testEventForwarder.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="userscripts\netflix\main.js">
       <SubType>Code</SubType>
     </Compile>
@@ -87,6 +96,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="userscripts\netflix\webpack.config.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\controls\ControlEvents.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="web\javascripts\gui\controls\Libraries.js">
@@ -102,6 +114,30 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="scripts\loadVideosInDir.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\controls\TouchPad.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\EventCoordinates.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\Events.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\MenuScreen.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\menu\ListMenu.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\menu\MainMenu.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\menu\MenuItem.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\menu\MenuItemScreen.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="web\javascripts\net\Client.js">
@@ -136,6 +172,8 @@
     <Folder Include="lib\" />
     <Folder Include="lib\net\" />
     <Folder Include="lib\config\" />
+    <Folder Include="lib\events\" />
+    <Folder Include="lib\control\" />
     <Folder Include="lib\tv\" />
     <Folder Include="lib\video\" />
     <Folder Include="lib\video\libraries\" />
@@ -151,6 +189,7 @@
     <Folder Include="userscripts\lib\" />
     <Folder Include="web\javascripts\gui\" />
     <Folder Include="web\javascripts\gui\controls\" />
+    <Folder Include="web\javascripts\gui\menu\" />
     <Folder Include="web\javascripts\menu\" />
     <Folder Include="web\javascripts\net\" />
     <Folder Include="web\" />

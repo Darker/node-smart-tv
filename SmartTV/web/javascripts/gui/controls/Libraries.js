@@ -1,22 +1,24 @@
-﻿import EventEmitter from "../../lib/event-emitter.js";
-import Library from "./Library.js";
+﻿import Library from "./Library.js";
+import MenuScreen from "../MenuScreen.js";
+import MenuItemScreen from "../menu/MenuItemScreen.js";
 /**
  * @typedef {import("../../VideoInfo.js").default} VideoInfo
  * */
-class Libraries extends EventEmitter {
+/**
+ * @typedef {import("../menu/ListMenu").default} ListMenu
+ * */
+
+class Libraries extends MenuScreen {
     constructor() {
         super();
         /** @type {{[id:string]:Library}} **/
         this.libs = null;
         this.libs = {};
-
-        this.libraryMenu = document.createElement("div");
-        this.libraryMenu.className = "libraryMenu";
-
+        /** @type {ListMenu} **/
+        this._libraryMenu = null;
         
-
         this.libraryContainer = document.createElement("div");
-        this.libraryContainer.className = "libraryContainer";
+        this.libraryContainer.className = "Libraries MenuScreen";
         /**
          * Shouldbe set to true if anything that affects visuals has changed
          * and was not projected to DOM.
@@ -30,12 +32,19 @@ class Libraries extends EventEmitter {
             }
         }
     }
+    /** @type {ListMenu} **/
+    get libraryMenu() {
+        return this._libraryMenu;
+    }
+    set libraryMenu(value) {
+        this._libraryMenu = value;
+        this.render();
+    }
     get main() {
         this.render();
         return this.libraryContainer;
     }
     render() {
-        this.libraryMenu.innerHTML = "";
         for (const lib of this.libraries()) {
             lib.render();
             const main = lib.main;
@@ -43,13 +52,21 @@ class Libraries extends EventEmitter {
                 this.libraryContainer.appendChild(main);
             }
 
-            const libButton = document.createElement("button");
-            libButton.className = "libButton";
-            libButton.setAttribute("data-library", lib.uniqueID);
-            libButton.appendChild(document.createTextNode(lib.label));
-            this.libraryMenu.appendChild(libButton);
+            if (this._libraryMenu && !lib._menuitem) {
+                const item = lib._menuitem = new MenuItemScreen(this, lib.label, null, () => { this.showLibrary(lib.uniqueID); });
+                this._libraryMenu.addItem(item);
+            }
         }
-
+    }
+    showLibrary(id) {
+        for (const lib of this.libraries()) {
+            if (lib.uniqueID != id) {
+                lib.selected = false;
+            }
+            else {
+                lib.selected = true;
+            }
+        }
     }
     /**
      * 
@@ -64,6 +81,10 @@ class Libraries extends EventEmitter {
             this.render();
         }
     }
+    /**
+     * 
+     * @param {string} id
+     */
     getLibraryById(id) {
         if (!this.libs[id]) {
             const lib = this.libs[id] = new Library();
@@ -72,6 +93,10 @@ class Libraries extends EventEmitter {
                 this.emit("video.click", x);
             });
             this.dirty = true;
+            console.log()
+            if (Object.getOwnPropertyNames(this.libs).length == 1) {
+                lib.selected = true;
+            }
         }
         return this.libs[id];
     }

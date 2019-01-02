@@ -1,7 +1,7 @@
 ﻿const EventEmitter = require("events");
-/**
- * @typedef {import("../video/Player")} Player
- * */
+const forwardEvents = require("../events/forwardEvents");
+const Player = require("../video/Player");
+
 
 /**
  * @typedef {import("../video/MediaLibrary")} MediaLibrary
@@ -26,14 +26,28 @@ class SmartTV extends EventEmitter {
         this.libraries = [];
 
         this.activePlayerIndex = -1;
+
+        this._fakeActivePlayer = new Player();
+
     }
     /** @type {Player} player that is handling currently selected audio/video **/
     get activePlayer() {
         if (this.activePlayerIndex >= 0 && this.activePlayerIndex < this.players.length) {
-            return this.players[this.activePlayerIndex];
+            const player = this.players[this.activePlayerIndex];
+            return player;
         }
         else {
             return null;
+        }
+    }
+
+    get activePlayerNoNull() {
+        const player = this.activePlayer;
+        if (player != null) {
+            return player;
+        }
+        else {
+            return this._fakeActivePlayer;
         }
     }
 
@@ -42,6 +56,20 @@ class SmartTV extends EventEmitter {
             return await this.activePlayer.isPlaying();
         }
         return false;
+    }
+    /**
+     * @param {Player} player
+     * */
+    addPlayer(player) {
+        this.players.push(player);
+        forwardEvents(player, 
+            {
+                playing: "player.playing",
+                medialoaded: "player.medialoaded",
+                timeupdate: "player.timeupdate"
+            }
+            , this);
+        
     }
     /**
      * Tries to find a video within the 

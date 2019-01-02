@@ -42,6 +42,14 @@ class RemoteClient extends Client {
 
         this.registerRemoteRPC("libraryAdd");
         this.registerRemoteRPC("libraryMetadata");
+        this.initInfo();
+
+    }
+    async initInfo() {
+        await this.libraryMetadata(this.tv.libraries.map((lib) => { return lib.toSimpleStruct(); }));
+        await this.libraryAdd([...this.tv.allVideoStructs()]);
+        this.io.emit("player.playing", await this.tv.isPlaying());
+        this.io.emit("player.medialoaded", await this.tv.activePlayerNoNull.isMediaOpen());
     }
     get session() {
         return this.io.handshake.session;
@@ -50,7 +58,13 @@ class RemoteClient extends Client {
      * RPC, will be overwritten
      * @param {[]} videos
      */
-    libraryAdd(videos) {
+    async libraryAdd(videos) {
+
+    }
+    /**
+     * @param {[]} metadata
+     */
+    async libraryMetadata(metadata) {
 
     }
 }

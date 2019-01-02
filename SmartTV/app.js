@@ -9,6 +9,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const RemoteClient = require("./lib/net/RemoteClient");
+const forwardEvents = require("./lib/events/forwardEvents");
 
 const SETTINGS = require("./lib/config/configLoader")();
 
@@ -16,6 +17,7 @@ const SmartTV = require("./lib/tv/SmartTV");
 const VLCMediaPlayer = require("./lib/video/players/vlc/VLCMediaPlayer");
 const LibLocalFilesystem = require("./lib/video/libraries/LibLocalFilesystem");
 const LibRemovableDrives = require("./lib/video/libraries/LibRemovableDrives");
+const MouseControl = require("./lib/control/MouseControl");
 
 var app = express();
 var createServer = require('http').createServer;
@@ -70,12 +72,23 @@ app.use(express.static(path.join(__dirname, 'web')));
 // smart TV init
 const TV = new SmartTV();
 // add media library
-TV.libraries.push(new LibLocalFilesystem(["D:\\odpad\\video"]));
-TV.libraries.push(new LibRemovableDrives());
+const libraryLocFs = new LibLocalFilesystem(["D:\\odpad\\video"]);
+libraryLocFs.label = "Local files";
+const libraryUSB = new LibRemovableDrives();
+libraryUSB.label = "Removable media";
+TV.libraries.push(libraryLocFs);
+TV.libraries.push(libraryUSB);
 // add a player
-TV.players.push(new VLCMediaPlayer("C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe"));
-
+TV.addPlayer(new VLCMediaPlayer("C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe"));
+TV.on("player.playing", (state) => {
+    toAllClients("player.playing", state);
+});
+TV.on("player.timeupdate", (state) => {
+    toAllClients("player.timeupdate", state);
+});
 TV.startLoadingMedia();
+
+const mouseControl = new MouseControl();
 
 var io = require('socket.io')(server);
 
@@ -99,16 +112,29 @@ app.use(sessionMiddleware);
 io.use(require("express-socket.io-session")(sessionMiddleware, {
     autoSave: true
 }));
-
+/** @type {RemoteClient[]} **/
 const CLIENTS = [];
+
+function toAllClients(eventName, ...args) {
+    args.unshift(eventName);
+    for (const client of CLIENTS) {
+        client.io.emit.apply(client.io, args);
+    }
+}
 
 io.on('connection', function (socket) {
     console.log('a user connected', socket.handshake.session.logins);
-    const client = new RemoteClient(socket,TV);
+    const client = new RemoteClient(socket, TV);
+    socket.on("mouse.move.delta", (vector) => {
+        mouseControl.moveDelta(vector);
+    });
+    socket.on("mouse.button", (event) => {
+        mouseControl.buttonAction(event);
+    });
     client.all = CLIENTS;
 
     
-    client.libraryAdd([...TV.allVideoStructs()]);
+    
 
     CLIENTS.push(client);
     io.emit("clients.online", CLIENTS.length);

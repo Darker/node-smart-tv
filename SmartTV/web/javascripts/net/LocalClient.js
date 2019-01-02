@@ -15,6 +15,10 @@ class LocalClient extends Client {
             console.log("Videos found: ", videoInfos);
             this.emit("library.add", videoInfos);
         });
+        this.registerLocalRPC("libraryMetadata", (infos) => {
+            console.log("Library metadata!", infos);
+            this.emit("library.metadata", infos);
+        });
     }
     /**
      * Toggle between playing and paused.

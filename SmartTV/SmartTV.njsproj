@@ -71,6 +71,9 @@
     <Compile Include="lib\video\Player.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="lib\video\players\browser\BrowserPlayer.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="lib\video\players\netflix\NetflixPlayer.js">
       <SubType>Code</SubType>
     </Compile>
@@ -179,6 +182,7 @@
     <Folder Include="lib\video\libraries\" />
     <Folder Include="lib\video\exceptions\" />
     <Folder Include="lib\video\players\netflix\" />
+    <Folder Include="lib\video\players\browser\" />
     <Folder Include="lib\video\players\vlc\" />
     <Folder Include="lib\video\videotypes\" />
     <Folder Include="lib\video\players\" />

@@ -15,6 +15,7 @@ const SETTINGS = require("./lib/config/configLoader")();
 
 const SmartTV = require("./lib/tv/SmartTV");
 const VLCMediaPlayer = require("./lib/video/players/vlc/VLCMediaPlayer");
+const BrowserPlayer = require("./lib/video/players/browser/BrowserPlayer");
 const LibLocalFilesystem = require("./lib/video/libraries/LibLocalFilesystem");
 const LibRemovableDrives = require("./lib/video/libraries/LibRemovableDrives");
 const MouseControl = require("./lib/control/MouseControl");
@@ -68,7 +69,7 @@ app.use(express.static(path.join(__dirname, 'web')));
 //        error: {}
 //    });
 //});
-
+const FIREFOX_PATH = "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
 // smart TV init
 const TV = new SmartTV();
 // add media library
@@ -80,6 +81,8 @@ TV.libraries.push(libraryLocFs);
 TV.libraries.push(libraryUSB);
 // add a player
 TV.addPlayer(new VLCMediaPlayer("C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe"));
+TV.addPlayer(new BrowserPlayer(FIREFOX_PATH, 6462));
+
 TV.on("player.playing", (state) => {
     toAllClients("player.playing", state);
 });

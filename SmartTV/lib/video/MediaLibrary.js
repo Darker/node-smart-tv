@@ -41,7 +41,7 @@ class MediaLibrary extends EventEmitter {
      * @param {number} maxDuration if set, limits the duration of a search
      * @returns {Promise<Video[]>}
      */
-    async searchForVideos(maxDuration=Infinity) {
+    async searchForVideos(maxDuration=Infinity, maxCount=Infinity) {
         return [];
     }
     /**

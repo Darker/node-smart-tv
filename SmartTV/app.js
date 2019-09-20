@@ -1,5 +1,15 @@
 ﻿'use strict';
+
+/**
+ * @typedef Object ServerSettings
+ * @prop {string} vlc_path
+ */
+
+
+
 const PORT = process.env.PORT || 3000;
+
+
 
 var debug = require('debug');
 var express = require('express');
@@ -72,6 +82,7 @@ app.use(express.static(path.join(__dirname, 'web')));
 const FIREFOX_PATH = "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
 // smart TV init
 const TV = new SmartTV();
+
 // add media library
 const libraryLocFs = new LibLocalFilesystem(["D:\\odpad\\video"]);
 libraryLocFs.label = "Local files";
@@ -136,8 +147,8 @@ io.on('connection', function (socket) {
     });
     client.all = CLIENTS;
 
-    
-    
+
+
 
     CLIENTS.push(client);
     io.emit("clients.online", CLIENTS.length);

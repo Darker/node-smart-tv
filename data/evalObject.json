@@ -1,0 +1,26 @@
+{
+  "input": "({a:1})",
+  "result": {
+    "type": "object",
+    "actor": "server1.conn0.child1/obj21",
+    "class": "Object",
+    "extensible": true,
+    "frozen": false,
+    "sealed": false,
+    "ownPropertyLength": 1,
+    "preview": {
+      "kind": "Object",
+      "ownProperties": [ "Object" ],
+      "ownSymbols": [],
+      "ownPropertiesLength": 1,
+      "ownSymbolsLength": 0,
+      "safeGetterValues": {}
+    }
+  },
+  "timestamp": 1569261639563,
+  "exception": null,
+  "frame": null,
+  "helperResult": null,
+  "notes": null,
+  "from": "server1.conn0.child1/consoleActor2"
+}

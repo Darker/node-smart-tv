@@ -9,8 +9,6 @@
 
 const PORT = process.env.PORT || 3000;
 
-
-
 var debug = require('debug');
 var express = require('express');
 var path = require('path');
@@ -18,6 +16,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 const RemoteClient = require("./lib/net/RemoteClient");
 const forwardEvents = require("./lib/events/forwardEvents");
 
@@ -79,7 +78,7 @@ app.use(express.static(path.join(__dirname, 'web')));
 //        error: {}
 //    });
 //});
-const FIREFOX_PATH = "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
+
 // smart TV init
 const TV = new SmartTV();
 
@@ -92,7 +91,7 @@ TV.libraries.push(libraryLocFs);
 TV.libraries.push(libraryUSB);
 // add a player
 TV.addPlayer(new VLCMediaPlayer("C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe"));
-TV.addPlayer(new BrowserPlayer(FIREFOX_PATH, 6462));
+TV.addPlayer(new BrowserPlayer(SETTINGS.paths.firefox_path, 6462));
 
 TV.on("player.playing", (state) => {
     toAllClients("player.playing", state);

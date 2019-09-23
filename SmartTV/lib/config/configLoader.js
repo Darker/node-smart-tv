@@ -8,6 +8,11 @@ class Config {
                 email: ""
             }
         };
+        this.paths = {
+            vlc_path: "",
+            firefox_path: "",
+            videos_root_path: ""
+        };
     }
 }
 

@@ -14,7 +14,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>496f40d5-c031-498f-92cf-aceebbe57c6d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>app.js</StartupFile>
+    <StartupFile>testRemoteBrowser.js</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -50,6 +50,18 @@
     <Compile Include="lib\tv\SmartTV.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="lib\util\collections\spliced.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\util\DeferredPromise.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\util\PromiseCriticalSection.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\util\promiseSocketConnect.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="lib\video\exceptions\UnsupportedMediaError.js">
       <SubType>Code</SubType>
     </Compile>
@@ -74,6 +86,27 @@
     <Compile Include="lib\video\players\browser\BrowserPlayer.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="lib\video\players\browser\fremote\actors\Actor.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\video\players\browser\fremote\FRemote.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\video\players\browser\fremote\FSocket.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\video\players\browser\fremote\MessageTypedefs.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\video\players\browser\fremote\PendingNotification.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\video\players\browser\fremote\PendingRequest.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\video\players\browser\fremote\actors\Tab.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="lib\video\players\netflix\NetflixPlayer.js">
       <SubType>Code</SubType>
     </Compile>
@@ -90,6 +123,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="scripts\testEventForwarder.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="testCriticalSection.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="testRemoteBrowser.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="userscripts\netflix\main.js">
@@ -161,7 +200,7 @@
     <Content Include="config\config.json">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="config\config_default.json">
+    <Content Include="config\config.json">
       <SubType>Code</SubType>
     </Content>
     <Content Include="package.json" />
@@ -177,10 +216,14 @@
     <Folder Include="lib\config\" />
     <Folder Include="lib\events\" />
     <Folder Include="lib\control\" />
+    <Folder Include="lib\util\" />
     <Folder Include="lib\tv\" />
+    <Folder Include="lib\util\collections\" />
     <Folder Include="lib\video\" />
     <Folder Include="lib\video\libraries\" />
     <Folder Include="lib\video\exceptions\" />
+    <Folder Include="lib\video\players\browser\fremote\" />
+    <Folder Include="lib\video\players\browser\fremote\actors\" />
     <Folder Include="lib\video\players\netflix\" />
     <Folder Include="lib\video\players\browser\" />
     <Folder Include="lib\video\players\vlc\" />

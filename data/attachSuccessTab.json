@@ -1,0 +1,13 @@
+{
+  "type": "tabAttached",
+  "threadActor": "server1.conn0.child1/thread20",
+  "cacheDisabled": false,
+  "javascriptEnabled": true,
+  "traits": {
+    "reconfigure": false,
+    "frames": true,
+    "logInPage": true,
+    "canRewind": false
+  },
+  "from": "server1.conn0.child1/frameTarget1"
+}

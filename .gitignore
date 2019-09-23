@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 SmartTV/config/config.json
 /SmartTV/package-lock.json
+SmartTV/lib/video/players/browser/firefox-actors/

@@ -1,0 +1,21 @@
+{
+  "age_certifications": [],
+  "content_types": [],
+  "genres": [],
+  "languages": null,
+  "min_price": null,
+  "max_price": null,
+  "monetization_types": [ "ads", "buy", "flatrate", "free", "rent" ],
+  "presentation_types": [],
+  "providers": [ "nfx" ],
+  "release_year_from": null,
+  "release_year_until": null,
+  "scoring_filter_types": null,
+  "timeline_type": null,
+  "q": null,
+  "sort_by": null,
+  "sort_asc": null,
+  "query": null,
+  "page": 1,
+  "page_size": 10
+}

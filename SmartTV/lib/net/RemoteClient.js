@@ -3,7 +3,7 @@ const requireES6 = require("../../es6import");
 /**
  * @typedef {import("../../web/javascripts/net/Client").default} ClientClass
  * */
-/** @type {new()=>ClientClass} **/
+/** @type {ClientClass} **/
 const Client = requireES6(require.resolve("../../web/javascripts/net/Client"));
 
 /**
@@ -37,6 +37,13 @@ class RemoteClient extends Client {
         this.registerLocalRPC("playerStop", async (videoID) => {
             if (this.tv && this.tv.activePlayer) {
                 return this.tv.activePlayer.stop();
+            }
+        });
+
+        this.registerLocalRPC("playerPlayString", async (data) => {
+            if (this.tv) {
+                await this.tv.playVideoBySearchString(data);
+                return "DONE!";
             }
         });
 

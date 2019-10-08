@@ -49,9 +49,63 @@ class Tab extends Actor {
         await this.attach();
         const navRes = await this.send({ to: this.actor, type: "navigateTo", url: url });
         if (awaitLoad) {
-            await this.fsocket.notificationPromise(new PendingNotification("tabNavigated", (x) => { return x.state == "stop" && x.from == this.actor }));
+            await this.awaitLoad();
         }
         return navRes;
+    }
+    /**
+     * Navigates to URL if the browser is not at that URL already
+     * @param {string} url
+     * @param {boolean} awaitLoad true if you want to wait for navigation to end
+     * @returns {Object|null} Returns navigation event response if navigation occured
+     */
+    async navigateToIfNotThere(url, awaitLoad) {
+        await this.attach();
+        if (await this.js(`window.location.href != "${url}"`)) {
+            return await this.navigateTo(url, awaitLoad);
+        }
+        return null;
+    }
+    async urlContains(string) {
+        return await this.js(`window.location.href.indexOf("${string}") >= 0`);
+    }
+    /**
+     * Blocks until tab is done loading.
+     * */
+    async awaitLoad() {
+        await this.attach();
+        return await this.fsocket.notificationPromise(new PendingNotification("tabNavigated", (x) => { return x.state == "stop" && x.from == this.actor }));
+    }
+    async awaitElement(selector, maxDuration, startDelay = 5) {
+        const start = new Date().getTime();
+        const maxDelay = 800;
+
+        let delay = Math.min(startDelay, maxDelay);
+        while (!await this.js(`!!document.querySelector("${selector}")`)) {
+            if (delay < maxDelay) {
+                delay *= 2;
+            }
+            else {
+                delay = maxDelay;
+            }
+            const duration = new Date().getTime() - start;
+            if (duration + delay >= maxDuration) {
+                return false;
+            }
+            await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+        return true;
+    }
+    async clickElement(selector, trueClickEvent = false) {
+        if (trueClickEvent && false) {
+            //function consoleClickAction() {
+            //    const event = new MouseEvent("click");
+            //}
+        }
+        else {
+            await this.js(`document.querySelector("${selector}").click()`);
+        }
+        
     }
     /**
      * Evaluates script string and returns the result as received from server

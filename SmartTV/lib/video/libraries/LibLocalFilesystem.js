@@ -33,10 +33,13 @@ class LibLocalFilesystem extends MediaLibrary {
      * @param {number} maxDuration if set, limits the duration of a search
      * @returns {Promise<Video[]>}
      */
-    async searchForVideos(maxDuration = Infinity) {
+    async searchForVideos(maxDuration = Infinity, maxCount = Infinity) {
         const stack = this._oldPathStack || new PathStack();
         if (!this._oldPathStack) {
             stack.addPathList(this.paths);
+        }
+        if (stack.length == 0) {
+            return this.videosEnd;
         }
         const start = new Date().getTime();
 
@@ -53,6 +56,10 @@ class LibLocalFilesystem extends MediaLibrary {
                     result.push(vid);
                 }
             }
+
+            if (result.length >= maxCount) {
+                break;
+            }
             // adds all sub paths (if any)
             await stack.addSubPaths(currentPath);
 
@@ -61,7 +68,7 @@ class LibLocalFilesystem extends MediaLibrary {
             }
         }
 
-        return result;
+        return { videos: result, end: stack.length==0 };
     }
 }
 module.exports = LibLocalFilesystem;

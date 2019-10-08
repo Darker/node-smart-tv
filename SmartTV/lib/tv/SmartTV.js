@@ -82,6 +82,9 @@ class SmartTV extends EventEmitter {
         if (lib) {
             return lib.findVideo(uniqueID);
         }
+        else {
+            console.warn("Library for "+uniqueID+" not found!");
+        }
     }
     findLibrary(id) {
         for (const lib of this.libraries) {
@@ -121,10 +124,11 @@ class SmartTV extends EventEmitter {
         if (video == null) {
             return;
         }
-
+        console.log("video: "+video.uniqueID+" - Stopping player!");
         if (this.activePlayer) {
             await this.activePlayer.stop();
         }
+        console.log("video: " + video.uniqueID +" - Finding appropriate player");
         // find a player
         for (let i = 0, l = this.players.length; i < l; ++i) {
             const item = this.players[i];
@@ -133,7 +137,9 @@ class SmartTV extends EventEmitter {
                 break;
             }
         }
+        console.log("video: " + video.uniqueID + " - open in "+this.activePlayer.constructor.name);
         await this.activePlayer.openMedia(video);
+        console.log("video: " + video.uniqueID + " - play in " + this.activePlayer.constructor.name);
         return await this.activePlayer.play();
     }
     /**
@@ -145,6 +151,14 @@ class SmartTV extends EventEmitter {
     async playVideoById(uniqueID) {
         return await this.playVideo(this.getVideo(uniqueID));
     }
+    /**
+     * Try to directly play video using given search string
+     * @param {{library: string, string: string}} search
+     */
+    async playVideoBySearchString(search) {
+        const video = { uniqueID: search.library + "#" + search.string, title: search.string, libraryId: search.library, isSearch: true };
+        return await this.playVideo(video);
+    }
     async startLoadingMedia(really=false) {
         if (really) {
             await Timeout(10);
@@ -154,12 +168,23 @@ class SmartTV extends EventEmitter {
                     continue;
                 }
                 let sleep = 500;
-
+                let activeLibraries = 0;
                 for (const lib of this.libraries) {
-                    const videos = await lib.searchForVideos(1000);
-                    if(videos.length > 0)
-                        this.emit("media.new", videos);
-                    await Timeout(sleep);
+                    if (lib.videos.length < 20) {
+                        const videos = await lib.searchForVideos(1000);
+                        if (videos.videos.length > 0) {
+                            this.emit("media.new", videos.videos);
+                        }
+                        if (!videos.end && lib.videos.length < 10) {
+                            activeLibraries++;
+                        }
+                        await Timeout(sleep);
+                    }
+
+                }
+                if (activeLibraries == 0) {
+                    console.log("All libraries preloaded enough data.");
+                    break;
                 }
             }
             this.mediaLoaderPromise = null;

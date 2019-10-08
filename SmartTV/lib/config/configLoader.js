@@ -80,3 +80,4 @@ function mergeObjects(object, overrideObject) {
 module.exports = function () {
     return loadConfigs(...configPaths);
 }
+module.exports.Config = Config;

@@ -50,6 +50,12 @@
     <Compile Include="lib\tv\SmartTV.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="lib\util\collections\findMax.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\util\collections\removableIterator.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="lib\util\collections\spliced.js">
       <SubType>Code</SubType>
     </Compile>
@@ -119,13 +125,25 @@
     <Compile Include="lib\video\Video.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="lib\video\VideoSubscription.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="lib\video\videotypes\FSVideo.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\video\videotypes\NetflixVideo.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="scripts\JSDOC-typedef-generator.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="scripts\testEventForwarder.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="testCriticalSection.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="testLibNetflix.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="testRemoteBrowser.js">
@@ -140,6 +158,9 @@
     <Compile Include="userscripts\netflix\webpack.config.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="web\javascripts\gui\controls\AutoCompleteField.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="web\javascripts\gui\controls\ControlEvents.js">
       <SubType>Code</SubType>
     </Compile>
@@ -150,6 +171,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="web\javascripts\gui\controls\LibraryItem.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\controls\library\InstaPlayButton.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="web\javascripts\gui\controls\PlayerControls.js">
@@ -165,6 +189,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="web\javascripts\gui\Events.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\gui\GuiItem.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="web\javascripts\gui\MenuScreen.js">
@@ -194,6 +221,21 @@
     <Compile Include="web\javascripts\main.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="web\javascripts\typedefs\LibraryTypes.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\util\DOMLoadedPromise.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\util\EventThrottler.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\util\ListenerManager.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\javascripts\util\RemovableListener.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="web\javascripts\VideoInfo.js">
       <SubType>Code</SubType>
     </Compile>
@@ -204,6 +246,12 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="package.json" />
+    <Content Include="scripts\JSDOC-typedef-generator.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="web\debuggerbad1.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="web\index.html">
       <SubType>Code</SubType>
     </Content>
@@ -236,6 +284,7 @@
     <Folder Include="userscripts\lib\" />
     <Folder Include="web\javascripts\gui\" />
     <Folder Include="web\javascripts\gui\controls\" />
+    <Folder Include="web\javascripts\gui\controls\library\" />
     <Folder Include="web\javascripts\gui\menu\" />
     <Folder Include="web\javascripts\menu\" />
     <Folder Include="web\javascripts\net\" />
@@ -244,6 +293,8 @@
     <Folder Include="web\javascripts\" />
     <Folder Include="web\dist\" />
     <Folder Include="web\javascripts\lib\" />
+    <Folder Include="web\javascripts\util\" />
+    <Folder Include="web\javascripts\typedefs\" />
     <Folder Include="web\NewFolder1\" />
     <Folder Include="web\stylesheets\" />
   </ItemGroup>

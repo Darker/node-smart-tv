@@ -1,13 +1,14 @@
-﻿import EventEmitter from "../../lib/event-emitter.js";
-import ListMenu from "./ListMenu.js";
+﻿import ListMenu from "./ListMenu.js";
 import MenuItem from "./MenuItem.js";
+import GuiItem from "../GuiItem.js";
 import EventCoordinates from "../EventCoordinates.js";
 
 
 
-class MainMenu extends EventEmitter {
+class MainMenu extends GuiItem {
     constructor() {
         super();
+
         this.mainElement = document.createElement("div");
         this.mainElement.className = "MainMenu";
 
@@ -18,6 +19,8 @@ class MainMenu extends EventEmitter {
         this.mainElement.appendChild(this.dragArrow);
 
         this.content = new ListMenu(this);
+
+        this.listen(this.content, "change", (activeItem) => { this.storeActiveItem(activeItem); });
 
         this.resetMenuDrag();
 
@@ -99,6 +102,23 @@ class MainMenu extends EventEmitter {
             }
         });
     }
+    /**
+     * 
+     * @param {MenuItem} item
+     */
+    storeActiveItem(item) {
+        window.location.hash = "/" + item.title;
+    }
+    /**
+     * Restores active item from location hash. 
+     * @param {boolean} force if true, restores even if the menu item was already altered by user
+     */
+    restoreActiveItem(force = false) {
+        if (force || !this.content._changedByUserAction) {
+            this.content.showScreenByName(decodeURIComponent(window.location.hash.substr(2)));
+        }
+    }
+
     resetMenuDrag() {
         return this.drag = {
             start: { x: NaN, y: NaN },

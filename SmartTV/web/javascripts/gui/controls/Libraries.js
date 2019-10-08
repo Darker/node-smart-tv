@@ -12,7 +12,6 @@ class Libraries extends MenuScreen {
     constructor() {
         super();
         /** @type {{[id:string]:Library}} **/
-        this.libs = null;
         this.libs = {};
         /** @type {ListMenu} **/
         this._libraryMenu = null;
@@ -76,6 +75,20 @@ class Libraries extends MenuScreen {
         for (const meta of metadata) {
             const lib = this.getLibraryById(meta.uniqueID);
             lib.label = meta.label;
+            if (meta.features) {
+                let updated = false;
+                for (const [name, value] of Object.entries(meta.features)) {
+                    if (lib.features[name] !== value) {
+                        updated = true;
+                        lib.features[name] = value;
+                    }
+                    
+                }
+                if (updated) {
+                    lib.featuresUpdated();
+                }
+                
+            }
         }
         if (this.dirty) {
             this.render();
@@ -92,8 +105,8 @@ class Libraries extends MenuScreen {
             lib.on("video.click", (x) => {
                 this.emit("video.click", x);
             });
+            lib.on("play.string", (x) => { this.emit("play.string", x); });
             this.dirty = true;
-            console.log()
             if (Object.getOwnPropertyNames(this.libs).length == 1) {
                 lib.selected = true;
             }

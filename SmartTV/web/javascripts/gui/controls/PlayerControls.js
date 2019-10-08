@@ -71,7 +71,7 @@ class PlayerControls extends EventEmitter {
 
     set progress(value) {
         value = Math.max(0, Math.min(value, 100));
-        this.progressBar.style.setProperty(CSS_VAR_PROGRESS, value);
+        //this.progressBar.style.setProperty(CSS_VAR_PROGRESS, value);
         this._progress = value;
         if (this.preloaded < value) {
             this.preloaded = value;
@@ -103,7 +103,7 @@ class PlayerControls extends EventEmitter {
         //console.log("preloaded = ",value);
         value = Math.max(value, this.progress);
         value = Math.max(0, Math.min(value, 100));
-        this.progressBar.style.setProperty(CSS_VAR_PRELOADED, value);
+        //this.progressBar.style.setProperty(CSS_VAR_PRELOADED, value);
         this._preloaded = value;
     }
     /**

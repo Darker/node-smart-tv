@@ -10,6 +10,7 @@ class LocalClient extends Client {
         this.registerRemoteRPC("playerToggle");
         this.registerRemoteRPC("playerPlay");
         this.registerRemoteRPC("playerStop");
+        this.registerRemoteRPC("playerPlayString");
 
         this.registerLocalRPC("libraryAdd", (videoInfos) => {
             console.log("Videos found: ", videoInfos);
@@ -32,5 +33,10 @@ class LocalClient extends Client {
     async playerPlay(videoId) {
         
     }
+    /**
+     * Plays video by string search query, if the library supports it
+     * @param {{library: string, string: string}} data
+     */
+    async playerPlayString(data) {}
 }
 export default LocalClient;

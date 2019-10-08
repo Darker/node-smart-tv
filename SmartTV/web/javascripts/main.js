@@ -6,6 +6,8 @@ import MainMenu from "./gui/menu/MainMenu.js";
 import MenuItem from "./gui/menu/MenuItem.js";
 import TouchPad from "./gui/controls/TouchPad.js";
 import MenuItemScreen from "./gui/menu/MenuItemScreen.js";
+import EventThrottler from "./util/EventThrottler.js";
+import DOMLoadedPromise from "./util/DOMLoadedPromise.js";
 
 /**
  * @typedef {import("./gui/Events.js").TimeupdateEvent} TimeupdateEvent
@@ -46,7 +48,7 @@ function onIo(callback) {
         callback();
     }
     else {
-        window.addEventListener("io-ready", callback);
+        window.addEventListener("io-ready", callback, {once:true});
     }
 };
 
@@ -65,9 +67,14 @@ onIo(() => {
     });
     CLIENT.on("library.metadata", (metadata) => {
         libraries.setLibraryMetadata(metadata);
+        // restore selected library
+        menu.restoreActiveItem();
     });
     libraries.on("video.click", (data) => {
         CLIENT.playerPlay(data.uniqueID);
+    });
+    libraries.on("play.string", (data) => {
+        CLIENT.playerPlayString(data);
     });
     CLIENT.io.on("player.playing", (state) => {
         controls.playing = typeof state == "object"?state.playing:state;
@@ -95,6 +102,17 @@ document.querySelector("#main").appendChild(libraries.main);
 document.querySelector("#main").appendChild(touchPad.main);
 document.querySelector("#menu").appendChild(menu.main);
 
+(async () => {
+    await DOMLoadedPromise;
+    menu.restoreActiveItem();
+    console.log("Document is ready.");
+})();
+//const mouseEventThrottler = new EventThrottler(console.log);
+//mouseEventThrottler.getTimeoutSettings("mousemove").dispatchTimeout = 50;
+
+//window.addEventListener("mousemove", (e) => {
+//    mouseEventThrottler.throttledEmit("mousemove", e.x, e.y);
+//});
 
 window.controls = controls;
 window.libraries = libraries;

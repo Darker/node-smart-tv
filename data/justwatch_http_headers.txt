@@ -1,0 +1,10 @@
+GET https://apis.justwatch.com/content/titles/en_GB/popular?body=...
+Host: apis.justwatch.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:70.0) Gecko/20100101 Firefox/70.0
+Accept: application/json, text/plain, */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Origin: https://www.justwatch.com
+Connection: keep-alive
+Referer: https://www.justwatch.com/uk/search?providers=nfx&q=dis
+TE: Trailers

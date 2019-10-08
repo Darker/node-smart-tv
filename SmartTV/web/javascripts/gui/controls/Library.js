@@ -1,8 +1,10 @@
-﻿import EventEmitter from "../../lib/event-emitter.js";
-import VideoInfo from "../../VideoInfo.js";
+﻿import VideoInfo from "../../VideoInfo.js";
 import LibraryItem from "./LibraryItem.js";
+import AutoCompleteField from "./AutoCompleteField.js";
+import InstaPlayButton from "./library/InstaPlayButton.js";
+import GuiItem from "../GuiItem.js";
 
-class Library extends EventEmitter {
+class Library extends GuiItem {
     constructor() {
         super();
         this.main = document.createElement("div");
@@ -15,24 +17,62 @@ class Library extends EventEmitter {
         this.headingTextH2.appendChild(this.headingText);
         this.heading.appendChild(this.headingTextH2);
 
-        this.items = document.createElement("div");
-        this.items.className = "items";
+        this.toolsTop = document.createElement("div");
+        this.toolsTop.className = "tools top toolblock";
 
+        this.searchFieldArea = document.createElement("div");
+        this.searchFieldArea.className = "search";
+        this.searchField = new AutoCompleteField();
+        this.listen(this.searchField, "change", () => {
+            this.updateSearchArea();
+        });
+        this.searchField.html.className = "search";
+        this.searchFieldArea.appendChild(this.searchField.html);
+
+        this.searchInstaPlay = new InstaPlayButton();
+        this.listen(this.searchInstaPlay, "play", () => {
+            this.emit("play.string", { string: this.searchField.value, library: this.uniqueID });
+        });
+
+        //this.searchInstaPlay.style.display = "none";
+
+        this.toolsTop.appendChild(this.searchFieldArea);
+        this.toolsTop.appendChild(this.searchInstaPlay.html);
+
+
+        this.items = document.createElement("div");
+        this.items.className = "items toolblock";
 
         this.main.appendChild(this.heading);
+        this.main.appendChild(this.toolsTop);
         this.main.appendChild(this.items);
 
         /** @type {LibraryItem[]} **/
         this.videos = [];
+
+        this.features = {};
     }
     render() {
         for (const item of this.videos) {
             item.render();
             const main = item.main;
-            if (main.parentElement == null) {
-                this.items.appendChild(main);
-            }
+            this.items.appendChild(main);
         }
+    }
+    updateSearchArea() {
+        const shouldShow = this.searchField.value.length > 0 && !!this.features.playString;
+        console.log(`const ${shouldShow} = ${this.searchField.value.length} > 0 && ${!!this.features.playString};`)
+        this.searchInstaPlay.visible = shouldShow;
+        if (shouldShow) {
+            this.searchInstaPlay.text = this.searchField.value;
+        }
+    }
+    /**
+     * Should be called whenever list if features updates
+     * */
+    featuresUpdated() {
+        this.searchInstaPlay.visible = this.features.playString && this.features.search;
+        this.updateSearchArea();
     }
     set label(value) {
         //console.log("#" + this.uniqueID + " \""+this.label+"\" -> \""+value+"\"");

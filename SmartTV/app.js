@@ -27,6 +27,7 @@ const VLCMediaPlayer = require("./lib/video/players/vlc/VLCMediaPlayer");
 const BrowserPlayer = require("./lib/video/players/browser/BrowserPlayer");
 const LibLocalFilesystem = require("./lib/video/libraries/LibLocalFilesystem");
 const LibRemovableDrives = require("./lib/video/libraries/LibRemovableDrives");
+const LibNetflix = require("./lib/video/libraries/LibNetflix");
 const MouseControl = require("./lib/control/MouseControl");
 
 var app = express();
@@ -83,15 +84,20 @@ app.use(express.static(path.join(__dirname, 'web')));
 const TV = new SmartTV();
 
 // add media library
-const libraryLocFs = new LibLocalFilesystem(["D:\\odpad\\video"]);
+const libraryLocFs = new LibLocalFilesystem([SETTINGS.paths.videos_root_path]);
 libraryLocFs.label = "Local files";
 const libraryUSB = new LibRemovableDrives();
 libraryUSB.label = "Removable media";
+const libraryNetflix = new LibNetflix();
+libraryNetflix.label = "Netflix";
+
 TV.libraries.push(libraryLocFs);
 TV.libraries.push(libraryUSB);
+TV.libraries.push(libraryNetflix);
 // add a player
-TV.addPlayer(new VLCMediaPlayer("C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe"));
-TV.addPlayer(new BrowserPlayer(SETTINGS.paths.firefox_path, 6462));
+TV.addPlayer(new VLCMediaPlayer(SETTINGS.paths.vlc_path));
+TV.addPlayer(new BrowserPlayer(SETTINGS));
+//TV.addPlayer(new BrowserPlayer(SETTINGS.paths.firefox_path, 6462));
 
 TV.on("player.playing", (state) => {
     toAllClients("player.playing", state);

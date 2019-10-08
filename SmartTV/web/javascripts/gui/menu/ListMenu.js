@@ -15,6 +15,8 @@ class ListMenu extends EventEmitter {
         this.menu = menu;
         this.mainElement = document.createElement("ul");
         this.mainElement.className = "ListMenu";
+
+        this._changedByUserAction = false;
         /** @type {MenuItem[]} **/
         this._items = [];
     }
@@ -32,16 +34,53 @@ class ListMenu extends EventEmitter {
         item.on("click", (e) => {
             if(item.closeMenuOnClick)
                 this.menu.closeMenu();
-            if (item instanceof MenuItemScreen) {
-                this.showScreen(item);
+            for (const otherItem of this.itemsExcept(item)) {
+                otherItem.active = false;
             }
+            this.emit("change", item);
         });
     }
+
     showScreen(menuItem) {
         for (const item of this._items) {
-            if (item instanceof MenuItemScreen) {
-                item.screen.visible = (item.screen == menuItem.screen);
+            item.active = item == menuItem;
+        }
+    }
+
+    get activeItem() {
+        for (const item of this._items) {
+            if (item.active) {
+                return item;
             }
+        }
+        return null;
+    }
+    set activeItem(value) {
+        this.showScreen(value);
+    }
+    /**
+     * 
+     * @param {...MenuItem} unwantedItems
+     */
+    *itemsExcept(...unwantedItems) {
+        for (const item of this._items) {
+            if (unwantedItems.indexOf(item) == -1) {
+                yield item;
+            }
+        }
+    }
+    /**
+     * 
+     * @param {string} name title of the item that should be shown
+     */
+    showScreenByName(name) {
+        const screen = this._items.find((x) => x.title == name);
+        if (screen) {
+            console.log("Showing screen by name: ", name, screen);
+            this.showScreen(screen);
+        }
+        else {
+            console.log("Cannot show ", name, "- not found in", this._items.map((x) => x.title));
         }
     }
 

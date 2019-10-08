@@ -1,4 +1,8 @@
 ﻿import EventEmitter from "../lib/event-emitter.js";
+
+/**
+ * @typedef {import("./menu/MenuItemScreen.js").default} MenuItemScreen
+ * */
 /**
  * This class represents a main screen (visible content)
  * that can be toggled by menu item
@@ -6,7 +10,8 @@
 class MenuScreen extends EventEmitter {
     constructor() {
         super();
-
+        /** @type {MenuItemScreen[]} list of items that manage this screen. Screen is visible as long as one of the items is active**/
+        this.menuItems = [];
     }
     /** @type {HTMLElement} the main element. You mut override this to provide elm that can be hidden or shown **/
     get main() {
@@ -18,6 +23,19 @@ class MenuScreen extends EventEmitter {
     }
     set visible(value) {
         this.main.classList.toggle("visible",!!value);
+    }
+
+    updateVisibility() {
+        this.visible = this.oneOfMenuItemsActive();
+    }
+
+    oneOfMenuItemsActive() {
+        for (const item of this.menuItems) {
+            if (item.active) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

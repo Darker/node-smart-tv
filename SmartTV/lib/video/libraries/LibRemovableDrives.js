@@ -89,7 +89,9 @@ class LibRemovableDrives extends MediaLibrary {
         this.drivesCache = null;
         this.drivesCache = {};
     }
-
+    get canSearch() {
+        return true;
+    }
     /**
      * Search for videos in a given resource. This search function should
      * never find same video twice.
@@ -179,7 +181,7 @@ class LibRemovableDrives extends MediaLibrary {
             }
         }
 
-        return result;
+        return { videos: result, end: false };
     }
     createPathStack() {
 

@@ -20,14 +20,33 @@ class MenuItem extends EventEmitter {
             this.mainElement.style.backgroundImage = "url('" + iconUrl + "')";
         }
         this.mainElement.addEventListener("click", this.clickListener = (e) => {
-            this.emit("click");
-            if (this.onclick) {
-                this.onclick(e);
-            }
+            this.active = true;
         });
+        /** @type {boolean} **/
+        this._active = false;
     }
     hasSubMenu() {
         return false;
+    }
+
+    set active(value) {
+        /** @type {boolean} **/
+        value = !!value;
+        if (value != this._active) {
+            this._active = value;
+            this.mainElement.classList.toggle("active", value);
+            // item was activated
+            if (value) {
+                this.emit("click");
+                if (this.onclick) {
+                    this.onclick();
+                }
+            }
+        }
+    }
+    /** @type {boolean} **/
+    get active() {
+        return this._active;
     }
     /**
      * @returns {ListMenu}
@@ -37,6 +56,9 @@ class MenuItem extends EventEmitter {
     }
     get main() {
         return this.mainElement;
+    }
+    get title() {
+        return this.text.data;
     }
 
     destroy() {

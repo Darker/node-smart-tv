@@ -56,7 +56,7 @@ class Player extends EventEmitter {
     async isMediaOpen() { return false; }
     /**
      * Sets volume of the player.
-     * @param {any} number value between 0 and 1, percentage of volume
+     * @param {number} number value between 0 and 1, percentage of volume
      * @returns {number} final volume value, also between 0 and 1
      */
     async setVolume(number) { return NaN; }
@@ -77,18 +77,20 @@ class Player extends EventEmitter {
     async getDuration() {
         return NaN;
     }
-
-    /** @type {number} approximate current time in seconds **/
-    get currentTime() {
-        return this._currentTime;
-    }
+    
     /**
      * Seek at a time in seconds. Fraction of seconds may be supported
      * but is not required.
-     * @param {any} seconds
+     * @param {number} seconds
+     * @returns {boolean} true on success, false on failure
      */
     async seek(seconds) { return false; }
 
+    /**
+     * Seeks by an offset from current time.
+     * @param {number} dtseconds
+     * @returns {boolean} true on success, false on failure
+     */
     async relativeSeek(dtseconds) {
         const targetTime = dtseconds + (await this.getCurrentTime());
         if (!isNaN(targetTime)) {
@@ -97,6 +99,11 @@ class Player extends EventEmitter {
         else {
             return false;
         }
+    }
+
+    /** @type {number} approximate current time in seconds **/
+    get currentTime() {
+        return this._currentTime;
     }
 }
 module.exports = Player;

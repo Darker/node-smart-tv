@@ -83,29 +83,84 @@ body #menu {
     background-color: #ffcc00;
     color: black;
 }
-.Library .items {
+
+.Library .toolblock {
     width: 100%;
     overflow: hidden;
 }
+/** TOOLS **/
+
+.Library input.search {
+    display: block;
+    background-image: url("../images/library/search.svg");
+    background-repeat: no-repeat;
+    background-position-x: left;
+    background-position-y: center;
+    background-size:contain;
+    background-origin:content-box;
+    width: 100%;
+    padding:0.2em;
+    border: 1px solid #633a00;
+    background-color: #110b06;
+    color: transparent;
+}
+.Library input.search:focus {
+    background-image: none;
+    background-color: #ffcc94;
+    border-color: yellow;
+    color: black;
+}
+@media (pointer: coarse) {
+    .Library input.search {
+        padding: 0.3em 0.1em 0.3em 0.1em;
+    }
+}
+.Library div.InstaPlayButton {
+    color: #e19100;
+    background-color: #2e2c16;
+}
+
+.Library div.InstaPlayButton .title {
+    font-style: italic;
+}
+.Library div.InstaPlayButton .icon {
+    background-image: url('../images/buttons/play.svg');
+}
+/*** ITEMS ****/
 .LibraryItem {
     color: #ffcc00;
     background-color: #222;
+    font-size: 15pt;
+
+    display: flex;
+    align-items: flex-end;
 }
 .LibraryItem:nth-child(2n) {
     background-color: #292929
 }
-.LibraryItem .title{
+.LibraryItem .icon {
+    background-repeat: no-repeat;
+    background-position-x: left;
+    background-position-y: center;
+    background-size: contain;
+    background-origin: content-box;
+
+    width: 2ch;
+}
+
+.LibraryItem .title {
     text-wrap: none;
     
     white-space: nowrap;
     overflow:hidden;
     max-width: 100%;
     text-overflow: ellipsis;
-
-    font-size: 15pt;
+    flex-grow: 1;
+    
 
     cursor: pointer;
 }
+
 @media (pointer: coarse) {
     .LibraryItem .title {
         font-size: 18pt;
@@ -143,8 +198,8 @@ body #menu {
     border-width: 1px;
     border-bottom-width: 0px;
     background-color: #222;
-    border-top-left-radius: 1000px;
-    border-top-right-radius:1000px;
+    border-top-left-radius: 100%;
+    border-top-right-radius:100%;
     color: transparent;
     cursor: pointer;
     font-weight: normal;
@@ -162,8 +217,8 @@ body #menu {
 
 @media (pointer: coarse) {
     .PlayerControls button {
-        width: 32pt;
-        height: 32pt;
+        width: 38pt;
+        height: 38pt;
     }
 }
 
@@ -189,6 +244,7 @@ body #menu {
     background-color: #8f7a60;
     height: 0.3em;
     width: 100%;
+    position: relative;
     background-image: linear-gradient(to right, var(--color-progress) 0%,var(--color-progress) var(--progress)%,var(--color-preloaded) var(--progress)%,var(--color-preloaded) var(--preloaded)%,transparent var(--preloaded)%,transparent 100%);
 }
 

@@ -23,7 +23,9 @@ class FSVideo extends Video {
     get title() {
         return path.basename(this.fspath);
     }
-
+    get videoType() {
+        return Video.Type.MOVIE;
+    }
     async exists() {
         return (await fs.exists(this.fspath))
             && (await fs.stat(this.fspath)).isFile()

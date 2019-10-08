@@ -11,7 +11,16 @@ class MenuItemScreen extends MenuItem {
     constructor(controlledScreen, title, iconUrl, callback) {
         super(title, iconUrl, callback);
         this.screen = controlledScreen;
+        this.screen.menuItems.push(this);
     }
+    get active() {
+        return super.active;
+    }
+    set active(value) {
+        super.active = value;
+        this.screen.updateVisibility();
+    }
+
 }
 
 export default MenuItemScreen;

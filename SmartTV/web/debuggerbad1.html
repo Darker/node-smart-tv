@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Debugger fails again</title>
+</head>
+<body>
+    <script>
+        document.addEventListener("click", doError);
+        class X {
+            constructor() {
+                this._x = 0;
+            }
+            set x(value) {
+                this._x = value;
+                fn(wrongVarName);
+            }
+            get x() {
+                return this._x;
+            }
+        }
+        class Y extends X {
+            constructor() {
+                super();
+            }
+            set x(value) {
+                super.x = value;
+            }
+            get x() {
+                return super.x;
+            }
+        }
+        function fn() {
+
+        }
+        function doError() {
+            const test = new Y();
+            assignValue(test, 42);
+        }
+        function assignValue(xcls, val) {
+            xcls.x = val;
+        }
+    </script>
+</body>
+</html>

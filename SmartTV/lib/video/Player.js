@@ -3,7 +3,9 @@ const UnsupportedMediaError = require("./exceptions/UnsupportedMediaError");
 /**
  * @typedef {import("./Video")} Video
  * */
-
+/**
+ * @typedef {import("../../web/javascripts/typedefs/EventTypes")} EventTypes
+ * */
 
 /**
  * @event "timeupdate"
@@ -34,6 +36,13 @@ class Player extends EventEmitter {
         throw new UnsupportedMediaError("Dummy player cannot open any media.");
     }
     /**
+     * Returns loaded video if it's loaded or null
+     * @returns {Video|null}
+     * */
+    getLoadedMedia() {
+        return null;
+    }
+    /**
      * Starts playing current media. Shold never throw.
      * Return false on failure.
      * */
@@ -57,14 +66,14 @@ class Player extends EventEmitter {
     /**
      * Sets volume of the player.
      * @param {number} number value between 0 and 1, percentage of volume
-     * @returns {number} final volume value, also between 0 and 1
+     * @returns {Promise<number>} final volume value, also between 0 and 1
      */
     async setVolume(number) { return NaN; }
 
     /**
      * Retrieves and returns current time.
      * Returns current audio time in seconds.
-     * @returns {number}
+     * @returns {Promise<number>}
      * */
     async getCurrentTime() {
         return this._currentTime;
@@ -72,7 +81,7 @@ class Player extends EventEmitter {
     /**
      * Retrieves duration of the current media
      * value may be cached
-     * @returns {number}
+     * @returns {Promise<number>}
      * */
     async getDuration() {
         return NaN;
@@ -82,14 +91,50 @@ class Player extends EventEmitter {
      * Seek at a time in seconds. Fraction of seconds may be supported
      * but is not required.
      * @param {number} seconds
-     * @returns {boolean} true on success, false on failure
+     * @returns {Promise<boolean>} true on success, false on failure
      */
     async seek(seconds) { return false; }
 
     /**
+     * Returns information about the player
+     * @returns {PlayerInfoEvent}
+     */
+    async getInfo() {
+        const duration = await this.getDuration();
+        const loadedMedia = this.getLoadedMedia();
+        return {
+            progress: await this.getCurrentTime(),
+            preloaded: duration,
+            duration: duration,
+            isPlaying: await this.isPlaying(),
+            loadedMedia: loadedMedia?loadedMedia.toSimpleStruct():null
+        };
+    }
+
+    /**
+     * Seek using seek definition
+     * @param {SeekEvent} seekObject
+     * @returns {Promise<boolean>} true on success, false on failure
+     */
+    async smartSeek(seekObject) {
+        if (seekObject.type == "percentage") {
+            const length = await this.getDuration();
+            return await this.seek((seekObject.quantity / 100) * length);
+        }
+        else if (seekObject.type == "time") {
+            return await this.seek(seekObject.quantity);
+        }
+        else if (seekObject.type == "offset_time") {
+            return await this.relativeSeek(seekObject.quantity);
+        }
+
+        return false;
+    }
+
+    /**
      * Seeks by an offset from current time.
      * @param {number} dtseconds
-     * @returns {boolean} true on success, false on failure
+     * @returns {Promise<boolean>} true on success, false on failure
      */
     async relativeSeek(dtseconds) {
         const targetTime = dtseconds + (await this.getCurrentTime());

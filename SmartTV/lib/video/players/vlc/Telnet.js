@@ -49,6 +49,7 @@ class Telnet {
     }
     /**
      * @param {Buffer|string} data
+     * @param {RegExp} responseMatch regexp that identifies the correct response
      * @returns {Promise<String>}
      */
     async exec(data, responseMatch) {

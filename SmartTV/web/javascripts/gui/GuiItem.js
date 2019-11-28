@@ -5,6 +5,13 @@ class GuiItem extends EventEmitter {
         super();
         this.listeners = new ListenerManager();
     }
+    /**
+     * 
+     * @param {EventTarget|EventEmitter} target
+     * @param {string} name
+     * @param {function} listener
+     * @param {...any} args any further arguments for addEventListener()
+     */
     listen(target, name, listener, ...args) {
         this.listeners.listen(target, name, listener, ...args);
     }

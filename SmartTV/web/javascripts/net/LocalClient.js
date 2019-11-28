@@ -11,6 +11,8 @@ class LocalClient extends Client {
         this.registerRemoteRPC("playerPlay");
         this.registerRemoteRPC("playerStop");
         this.registerRemoteRPC("playerPlayString");
+        this.registerRemoteRPC("playerSeek");
+        this.registerRemoteRPC("playerGetInfo");
 
         this.registerLocalRPC("libraryAdd", (videoInfos) => {
             console.log("Videos found: ", videoInfos);

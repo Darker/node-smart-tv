@@ -1,7 +1,8 @@
 ﻿import ListMenu from "./ListMenu.js";
 import MenuItem from "./MenuItem.js";
 import GuiItem from "../GuiItem.js";
-import EventCoordinates from "../EventCoordinates.js";
+import EventCoordinates from "../../util/EventCoordinates.js";
+
 
 
 

@@ -1,9 +1,10 @@
-﻿
-import EventCoordinates from "../EventCoordinates.js";
-import MenuScreen from "../MenuScreen.js";
+﻿import MenuScreen from "../MenuScreen.js";
+import EventCoordinates from "../../util/EventCoordinates.js";
+
 class TouchPad extends MenuScreen {
     constructor() {
         super();
+        EventCoordinates
         this.mainElement = document.createElement("div");
         this.mainElement.className = "TouchPad MenuScreen";
         this.mainElement.addEventListener("touchstart", this.touchstart = this.touchstart.bind(this));

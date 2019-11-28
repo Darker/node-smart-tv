@@ -7,9 +7,11 @@
     get uri() {
         return "";
     }
+
     get description() {
         return "";
     }
+
     get title() {
         return "";
     }
@@ -30,7 +32,15 @@
      * @param {RegExp} regexSearch
      */
     matches(regexSearch) {
-        return false;
+        return regexSearch.exec(this.title) != null || regexSearch.exec(this.description) != null;
+    }
+    /**
+     * 
+     * @param {string} searchString
+     */
+    matchRelevance(searchString) {
+        let relevance = 0;
+        const preparedString = prepareSearchString(searchString);
     }
 
     toSimpleStruct() {
@@ -53,6 +63,32 @@
         return otherVideo.uniqueID == this.uniqueID;
     }
 }
+/**
+ * 
+ * @param {string} str
+ */
+function prepareSearchString(str) {
+    return str.replace(/[^a-z0-9]/g, " ").replace(/ +/g, " ").split(" ");
+}
+/**
+ * 
+ * @param {string[]} query
+ * @param {string} target
+ */
+function evaluateStringRelevance(query, target) {
+    target = prepareSearchString(target);
+    let relevance = 0;
+    const maxIndex = target.length;
+    for (const seachEntry of query) {
+        const index = target.indexOf(searchEntry);
+        if (index >= 0) {
+            relevance += 1 - index / maxIndex;
+        }
+    }
+    return relevance/query.length;
+}
+
+
 /**
  * @enum
  * */

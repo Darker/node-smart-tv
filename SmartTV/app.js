@@ -105,6 +105,9 @@ TV.on("player.playing", (state) => {
 TV.on("player.timeupdate", (state) => {
     toAllClients("player.timeupdate", state);
 });
+TV.on("player.medialoaded", (state) => {
+    toAllClients("player.medialoaded", state);
+});
 TV.startLoadingMedia();
 
 const mouseControl = new MouseControl();

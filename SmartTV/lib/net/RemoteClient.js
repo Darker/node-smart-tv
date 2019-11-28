@@ -23,9 +23,9 @@ class RemoteClient extends Client {
             this.emit("destroyMe");
         });
 
-        this.registerLocalRPC("playerToggle", () => {
+        this.registerLocalRPC("playerToggle", async () => {
             if (this.tv && this.tv.activePlayer) {
-                return this.tv.activePlayer.togglePlay();
+                return await this.tv.activePlayer.togglePlay();
             }
         });
         this.registerLocalRPC("playerPlay", async (videoID) => {
@@ -36,14 +36,29 @@ class RemoteClient extends Client {
         });
         this.registerLocalRPC("playerStop", async (videoID) => {
             if (this.tv && this.tv.activePlayer) {
-                return this.tv.activePlayer.stop();
+                return await this.tv.activePlayer.stop();
             }
         });
-
+        this.registerLocalRPC("playerSeek",
+            /**
+             * @param {SeekEvent} seek
+             * */
+            async (seek) => {
+                if (this.tv && this.tv.activePlayer) {
+                    return await this.tv.activePlayer.smartSeek(seek);
+                }
+            }
+        );
         this.registerLocalRPC("playerPlayString", async (data) => {
             if (this.tv) {
                 await this.tv.playVideoBySearchString(data);
                 return "DONE!";
+            }
+        });
+
+        this.registerLocalRPC("playerGetInfo", async (data) => {
+            if (this.tv) {
+                
             }
         });
 

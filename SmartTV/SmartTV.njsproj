@@ -125,6 +125,9 @@
     <Compile Include="lib\video\Video.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="lib\video\VideoStringFilter.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="lib\video\VideoSubscription.js">
       <SubType>Code</SubType>
     </Compile>
@@ -185,9 +188,6 @@
     <Compile Include="web\javascripts\gui\controls\TouchPad.js">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="web\javascripts\gui\EventCoordinates.js">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="web\javascripts\gui\Events.js">
       <SubType>Code</SubType>
     </Compile>
@@ -224,9 +224,12 @@
     <Compile Include="web\javascripts\typedefs\LibraryTypes.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="web\javascripts\util\CoordinatesTime.js" />
     <Compile Include="web\javascripts\util\DOMLoadedPromise.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="web\javascripts\util\DragOperation.js" />
+    <Compile Include="web\javascripts\util\EventCoordinates.js" />
     <Compile Include="web\javascripts\util\EventThrottler.js">
       <SubType>Code</SubType>
     </Compile>

@@ -1,10 +1,11 @@
-﻿import EventEmitter from "../../lib/event-emitter.js";
-import EventCoordinates from "../EventCoordinates.js";
+﻿import DragOperation from "../../util/DragOperation.js";
+import EventCoordinates from "../../util/EventCoordinates.js";
+import GuiItem from "../GuiItem.js";
 
 
 const CSS_VAR_PROGRESS = "--progress";
 const CSS_VAR_PRELOADED = "--preloaded";
-class PlayerControls extends EventEmitter {
+class PlayerControls extends GuiItem {
     constructor() {
         super();
         this.mainContainer = document.createElement("div");
@@ -42,6 +43,24 @@ class PlayerControls extends EventEmitter {
             const rect = this.progressBar.getBoundingClientRect();
             this.mouseSeek(EventCoordinates.getCoords(e).x, rect.left, rect.right - rect.left);
         });
+        const dragStartHandler = (evt) => {
+            if (this.progressDragOperation) {
+                this.progressDragOperation.destroy();
+            }
+            this.progressDragOperation = new DragOperation(evt);
+            this.progressDragOperation.on("moved", (op) => {
+                //console.log("Movement: ", this.progressDragOperation.lastCoordinates);
+            });
+        };
+        this.listen(this.progressBar, "mousedown", dragStartHandler);
+        this.listen(this.progressBar, "touchstart", dragStartHandler);
+        
+        /** @type {DragOperation} **/
+        this.progressDragOperation = null;
+        //this.progressDrag = document.createElement("div");
+        //this.progressDrag.className = "progress_drag";
+        //this.progressBar.append(this.progressDrag);
+
         //setInterval(() => {
         //    if (Math.random() > 0.2) {
         //        const value = Math.random();
@@ -67,26 +86,23 @@ class PlayerControls extends EventEmitter {
     }
     set medialoaded(value) {
         this.mainContainer.classList.toggle("medialoaded", value);
+        if (!value) {
+            this.progress = 0;
+            this.preloaded = 0;
+        }
     }
 
     set progress(value) {
         value = Math.max(0, Math.min(value, 100));
-        //this.progressBar.style.setProperty(CSS_VAR_PROGRESS, value);
         this._progress = value;
         if (this.preloaded < value) {
             this.preloaded = value;
         }
+        this.progressBar.style.setProperty(CSS_VAR_PROGRESS, value + "%");
     }
     /** @type {number} **/
     get progress() {
         return this._progress;
-        //const prop = this.progressBar.style.getProperty(CSS_VAR_PROGRESS);
-        //if (!isNaN(prop * 1)) {
-        //    return prop;
-        //}
-        //else {
-        //    return 0;
-        //}
     }
 
     get preloaded() {
@@ -103,7 +119,7 @@ class PlayerControls extends EventEmitter {
         //console.log("preloaded = ",value);
         value = Math.max(value, this.progress);
         value = Math.max(0, Math.min(value, 100));
-        //this.progressBar.style.setProperty(CSS_VAR_PRELOADED, value);
+        this.progressBar.style.setProperty(CSS_VAR_PRELOADED, value+"%");
         this._preloaded = value;
     }
     /**
@@ -115,9 +131,12 @@ class PlayerControls extends EventEmitter {
     mouseSeek(position, left, width) {
         const percentage = ((position - left) / width) * 100;
         console.log("Mouse seek", "((" + position + " - " + left + ") / " + width + ") * 100 = ", percentage)
-        this.seek(percentage);
+        this.seek({quantity: percentage, type:"percentage"});
     }
-
+    /**
+     * 
+     * @param {SeekEvent} percentage
+     */
     seek(percentage) {
         console.log("seek", percentage);
         this.emit("seek", percentage);

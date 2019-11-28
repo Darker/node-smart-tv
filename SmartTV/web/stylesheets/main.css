@@ -179,8 +179,11 @@ body #menu {
 
     z-index: 100;
 
-    --progress: 30;
-    --preloaded: 50;
+    --progress: 30%;
+    --preloaded: 50%;
+
+    --progress-height: 0.3em;
+    --buttons-size: 20pt;
 
     --color-progress: rgba(252,65,2,1);
     --color-preloaded: rgba(255,196,2,1);
@@ -188,6 +191,7 @@ body #menu {
     left: 0;
     right: 0;
 }
+
 .PlayerControls button {
     margin: 0px;
     padding: 0px;
@@ -199,26 +203,21 @@ body #menu {
     border-bottom-width: 0px;
     background-color: #222;
     border-top-left-radius: 100%;
-    border-top-right-radius:100%;
+    border-top-right-radius: 100%;
     color: transparent;
     cursor: pointer;
     font-weight: normal;
     font-size: 2pt;
-
-
     background-size: 60%;
     background-position: center center;
     background-repeat: no-repeat;
-    width: 20pt;
-    height: 20pt;
+    width: var(--buttons-size);
+    height: var(--buttons-size);
 }
-
-
 
 @media (pointer: coarse) {
     .PlayerControls button {
-        width: 38pt;
-        height: 38pt;
+        --buttons-size: 38pt;
     }
 }
 
@@ -242,15 +241,39 @@ body #menu {
 }
 .PlayerControls .progress {
     background-color: #8f7a60;
-    height: 0.3em;
+    height: var(--progress-height);
     width: 100%;
     position: relative;
-    background-image: linear-gradient(to right, var(--color-progress) 0%,var(--color-progress) var(--progress)%,var(--color-preloaded) var(--progress)%,var(--color-preloaded) var(--preloaded)%,transparent var(--preloaded)%,transparent 100%);
+
+    --drag-elm-width: 0.3em;
+
+    background-image: linear-gradient(to right, var(--color-progress) 0%,var(--color-progress) var(--progress),var(--color-preloaded) var(--progress),var(--color-preloaded) var(--preloaded),transparent var(--preloaded),transparent 100%);
+}
+.PlayerControls .progress .progress_drag {
+    background: linear-gradient(to right, rgba(28,13,0,0.04) 0%,rgba(0,0,0,0.8) 50%,rgba(28,13,0,0.04) 100%);
+
+    width: 0px;
+    transition: width 0.2s linear;
+    height: var(--progress-height);
+
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    top: 0px;
+    left: var(--progress);
+    display: block;
+    content: " ";
+    transform:translateX(-50%);
+}
+
+.PlayerControls.playing .progress .progress_drag {
+    width: var(--drag-elm-width);
 }
 
 @media (pointer: coarse) {
     .PlayerControls .progress {
-        height: 1em;
+        --progress-height: 1em;
+        --drag-elm-width: 0.7em;
     }
 }
 

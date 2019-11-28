@@ -62,6 +62,7 @@ onIo(() => {
     controls.on("stop", () => {
         CLIENT.playerStop();
     })
+    controls.on("seek", (seekEvent) => { CLIENT.playerSeek(seekEvent); });
     CLIENT.on("library.add", (videos) => {
         libraries.videosAdded(videos);
     });
@@ -87,8 +88,18 @@ onIo(() => {
         (state) => {
             console.log("Timeupdate: ", state);
             controls.progress = (state.currentTime / state.duration) * 100;
+            if (state.preloaded && state.preloaded != state.currentTime) {
+                controls.preloaded = (state.preloaded / state.duration) * 100;
+            }
         }
     );
+    CLIENT.io.on("player.medialoaded",
+        (state) => {
+            console.log("Medialoaded: ", state);
+            controls.medialoaded = !!state;
+        }
+    );
+
     touchPad.on("move.delta", (vector) => {
         CLIENT.io.emit("mouse.move.delta", vector);
     });

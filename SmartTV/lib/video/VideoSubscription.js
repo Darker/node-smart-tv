@@ -11,7 +11,6 @@ class VideoSubscription extends EventEmitter {
         super();
         this.creation = new Date().getTime();
         this.filter = filter;
-
     }
     /**
      * @description The age of subscription is used to determine whether the subscription is outdated

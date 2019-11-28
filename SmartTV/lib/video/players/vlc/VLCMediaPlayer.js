@@ -57,11 +57,13 @@ class VLCMediaPlayer extends Player {
         if (value) {
             if (this.timeupdateInterval == null) {
                 this.timeupdateInterval = setInterval(async () => {
+                    const duration = await this.getDuration();
                     this.emit(
                         "timeupdate",
                         {
                             currentTime: await this.getCurrentTime(),
-                            duration: await this.getDuration()
+                            duration,
+                            preloaded: duration
                         }
                     );
                 }, 1500);
@@ -191,8 +193,19 @@ class VLCMediaPlayer extends Player {
      * but is not required.
      * @param {any} seconds
      */
-    async seek(seconds) { return false; }
+    async seek(seconds) { await this.cmd("seek "+Math.round(seconds)); }
+ //   /**
+ //* Seek at a time in seconds. Fraction of seconds may be supported
+ //* but is not required.
+ //* @param {any} seconds
+ //*/
+ //   async seek(seconds) {
+ //       await this.cmd("seek " + Math.round(seconds * 1000) + "ms");
+ //   }
 
+ //   async relativeSeek(seconds) {
+ //       await this.cmd("seek " + (seconds > 0 ? "+" : "-") + Math.round(Math.abs(seconds) * 1000) + "ms");
+ //   }
     async cmd(cmd, regex) {
         return await this.telnet.exec(cmd+"\r\n", regex);
     }

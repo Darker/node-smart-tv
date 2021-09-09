@@ -1,0 +1,3 @@
+[submodule "SmartTV/web/javascripts/lib/mareda-util"]
+	path = SmartTV/web/javascripts/lib/mareda-util
+	url = git@github.com:Darker/mareda-util.git
